@@ -3,162 +3,160 @@
 ==========================================================*/
 
 :root {
-    --primary-color: #1a4d7d;
-    /* Dark Blue */
-    --secondary-color: #009688;
-    /* Teal/Accent */
-    --background-light: #f4f7f6;
+    --primary-color: #00796B;
+    --accent-color: #3f51b5;
+    --background-start: #e0f2f1;
+    --background-end: #f0f2f5;
     --card-background: #ffffff;
-    --text-dark: #343a40;
-    --border-light: #e9ecef;
-    --risk-high: #dc3545;
-    --risk-low: #28aa52;
+    --text-dark: #263238;
+    --text-muted: #607d8b;
+    --border-light: #e0e6ec;
+    --risk-high: #D32F2F;
+    --risk-low: #388E3C;
+    --shadow-deep: 0 12px 30px rgba(0, 0, 0, 0.15);
+    --font-heading: 'Poppins', sans-serif;
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, border-color 0.4s ease;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: var(--background-light);
     color: var(--text-dark);
     line-height: 1.6;
+    background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+    background-size: 200% 200%;
+    animation: subtleShift 60s ease infinite;
 }
 
-
-/* Headings */
+@keyframes subtleShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 
 h1,
 h2,
 h3 {
     color: var(--primary-color);
-    margin-top: 0;
+    font-family: var(--font-heading);
 }
 
 h2 {
     border-bottom: 2px solid var(--border-light);
-    padding-bottom: 10px;
-    margin-bottom: 25px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    font-weight: 500;
 }
-
-
-/* Links */
 
 a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-a:hover {
-    color: #123758;
-}
-
-
-/* Utility Classes */
-
-.mt-20 {
-    margin-top: 20px;
-}
-
-.mt-30 {
-    margin-top: 30px;
+    color: var(--accent-color);
 }
 
 
 /*==========================================================
-  1. LAYOUT & CONTAINERS
+  1. NAVIGATION & NAVBAR
+==========================================================*/
+
+.navbar {
+    background-color: rgba(0, 121, 107, 0.98);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 18px 60px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-brand a {
+    color: white;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.navbar-links a {
+    color: #e0f2f1;
+    padding: 10px 18px;
+    border-radius: 25px;
+}
+
+.navbar-links a:hover {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+    transform: translateY(-2px);
+}
+
+.btn-logout:hover {
+    transform: scale(1.05);
+}
+
+
+/*==========================================================
+  2. LAYOUT & CONTAINERS (Centering Fix Applied Here)
 ==========================================================*/
 
 .content-wrapper {
-    padding: 20px;
+    /* FIX: Ensure no unnecessary horizontal padding interferes with margin: auto */
+    padding: 30px 0;
+    /* Keep vertical padding, remove horizontal padding */
 }
 
 .main-content {
-    max-width: 900px;
+    /* Set width limits */
+    max-width: 1200px;
+    width: 90%;
+    /* FIX: The margin auto on the left/right centers the block element */
     margin: 30px auto;
-    padding: 30px;
+    padding: 45px;
     background: var(--card-background);
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    box-shadow: var(--shadow-deep);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+
+/* HIGHLY STYLED CARD ELEMENTS (ANALYTICS STYLE) */
 
 .info-card,
-.tracking-card {
-    background-color: #f8f9fa;
-    padding: 25px;
-    border-radius: 8px;
-    margin-top: 20px;
-    border: 1px solid var(--border-light);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+.tracking-card,
+.recommendations-section,
+.chart-section {
+    background-color: rgba(255, 255, 255, 0.98);
+    padding: 30px;
+    border-radius: 15px;
+    margin-top: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.info-card h3,
-.tracking-card h3 {
-    color: var(--text-dark);
-    font-size: 1.15em;
-    margin-bottom: 10px;
+.info-card:hover,
+.tracking-card:hover,
+.recommendations-section:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.tracking-card {
+    border-left: 6px solid var(--accent-color);
+}
+
+.recommendations-section {
+    border-left: 6px solid var(--primary-color);
+    background-color: #e0f2f1;
 }
 
 .input-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-
-/*==========================================================
-  2. NAVIGATION & NAVBAR
-==========================================================*/
-
-.navbar {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 15px 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.navbar-brand a {
-    color: white;
-    font-size: 1.6em;
-    font-weight: 700;
-}
-
-.navbar-links a {
-    color: #c9dffc;
-    margin-left: 25px;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.navbar-links a:hover {
-    background-color: #2c6396;
-    text-decoration: none;
-}
-
-.user-info {
-    margin-left: 25px;
-    color: #9cbce0;
-    font-size: 0.9em;
-}
-
-.btn-logout {
-    background-color: var(--risk-high) !important;
-    color: white !important;
-    padding: 8px 15px !important;
-    margin-left: 30px !important;
-    font-weight: bold;
-}
-
-.btn-logout:hover {
-    background-color: #a71d2a !important;
+    gap: 30px;
 }
 
 
@@ -168,66 +166,24 @@ a:hover {
 
 .btn-primary,
 .btn-secondary {
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    display: inline-block;
-    text-align: center;
-    transition: background-color 0.3s, transform 0.1s;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
+    padding: 16px 35px;
+    border-radius: 35px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary:hover {
-    background-color: #123758;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background-color: #e9ecef;
-    color: var(--text-dark);
-    border: 1px solid #ced4da;
-}
-
-.btn-secondary:hover {
-    background-color: #d8dee3;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-dark);
+    background-color: #303f9f;
+    transform: translateY(-3px);
 }
 
 .form-group input,
 .form-group select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(26, 77, 125, 0.25);
-    outline: none;
-}
-
-.file-input {
-    cursor: pointer;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #fcfcfc;
+    border: 1px solid var(--border-light);
 }
 
 
@@ -240,27 +196,21 @@ a:hover {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: var(--primary-color);
-    /* Matches navbar */
+    background: linear-gradient(135deg, #00796B 0%, #26A69A 100%);
 }
 
 .login-container {
+    width: 600px;
+    padding: 70px 90px;
     background: var(--card-background);
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    width: 380px;
-    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border-top: 6px solid var(--accent-color);
 }
 
 .login-container h2 {
+    font-size: 2.5em;
     color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.login-container p {
-    color: #6c757d;
-    margin-bottom: 30px;
 }
 
 
@@ -268,172 +218,39 @@ a:hover {
   5. ALERTS, MESSAGES & RESULTS
 ==========================================================*/
 
-
-/* General Alerts */
-
-.alert {
-    padding: 18px;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.05em;
-}
-
-.alert a {
-    text-decoration: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-    margin-left: 20px;
-}
-
-.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-}
-
-.error-message {
-    padding: 15px;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: var(--risk-high);
-    border-radius: 5px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-
-/* Result Box */
-
 .result-box {
-    padding: 30px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 60px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .risk-score {
-    font-size: 2.8em;
+    font-size: 4em;
     font-weight: 700;
-    margin: 10px 0;
 }
 
 .high-risk {
-    background-color: #fef1f3;
-    border: 2px solid var(--risk-high);
+    background-color: #fff5f5;
+    border: 3px solid var(--risk-high);
     color: var(--risk-high);
 }
 
 .low-risk {
-    background-color: #f0f9f2;
-    border: 2px solid var(--risk-low);
+    background-color: #f0fff0;
+    border: 3px solid var(--risk-low);
     color: var(--risk-low);
 }
 
 
-/* Dashboard Summary Alerts */
+/* Recommendations List */
 
-.high-risk-summary {
-    background-color: #fbe0e2;
-    border: 1px solid #dc3545;
-    color: #721c24;
+.tip-list li {
+    background: var(--card-background);
+    border-left: 5px solid var(--accent-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.low-risk-summary {
-    background-color: #e0f8e5;
-    border: 1px solid #28a745;
-    color: #155724;
-}
-
-
-/*==========================================================
-  6. ANALYSIS TABLE
-==========================================================*/
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-}
-
-.data-table th,
-.data-table td {
-    padding: 15px 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-light);
-}
-
-.data-table th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-transform: uppercase;
-    font-size: 0.9em;
-}
-
-.data-table tbody tr:hover {
-    background-color: #f0f3f5;
-}
-
-
-/* Impact Indicators */
-
-.impact-high {
-    color: var(--risk-high);
-    font-weight: bold;
-}
-
-.impact-medium {
-    color: #ffc107;
-    font-weight: 500;
-}
-
-.impact-low {
-    color: var(--risk-low);
-}
-
-
-/*==========================================================
-  7. RESPONSIVENESS
-==========================================================*/
-
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        padding: 15px 20px;
-    }
-    .navbar-links {
-        margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .navbar-links a,
-    .user-info {
-        margin: 5px 10px;
-    }
-    .main-content {
-        padding: 20px;
-        margin: 20px auto;
-    }
-    .alert {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .alert a {
-        margin-left: 0;
-        margin-top: 10px;
-        width: 100%;
-        text-align: center;
-    }
+.tip-list li:hover {
+    background-color: #f7f7ff;
+    transform: translateX(8px);
 }

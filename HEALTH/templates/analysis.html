@@ -16,11 +16,13 @@
 
     <div class="chart-section main-content">
         <h3>📈 Historical Risk Trend</h3>
-        <p style="color: #6c757d; font-size: 0.9em;">Tracking your risk score over your past analyses.</p>
-        <canvas id="riskChart"></canvas>
+        <p style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 20px;">Tracking your risk score over your past analyses.</p>
+        <div style="height: 350px;">
+            <canvas id="riskChart"></canvas>
+        </div>
     </div>
     <div class="details-section">
-        <h3>Biometric Data Analyzed:</h3>
+        <h3>Biometric Data Snapshot:</h3>
         <table class="data-table">
             <thead>
                 <tr>
@@ -58,7 +60,7 @@
             <li>{{ tip }}</li>
             {% endfor %}
         </ul>
-        <p class="mt-20" style="font-style: italic; color: #6c757d;">
+        <p class="mt-20" style="font-style: italic; color: var(--text-muted);">
             This plan is generated based on your latest risk score and your profile's BMI.
         </p>
     </div>
@@ -67,59 +69,5 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 1. Fetch data from the Flask API endpoint
-        fetch('/api/history')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch history data.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const ctx = document.getElementById('riskChart').getContext('2d');
-
-                // 2. Initialize the chart
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels, // Dates/Times
-                        datasets: [{
-                            label: 'Risk Percentage (%)',
-                            data: data.data, // Risk Scores
-                            borderColor: 'var(--risk-high)',
-                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
-                            tension: 0.3,
-                            fill: true,
-                            pointStyle: 'circle',
-                            pointRadius: 5,
-                            pointHoverRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { mode: 'index', intersect: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                title: { display: true, text: 'Risk Score (%)' }
-                            },
-                            x: {
-                                title: { display: true, text: 'Analysis Date' }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching history:', error);
-                document.querySelector('.chart-section').innerHTML = '<p class="error-message">Could not load historical chart data.</p>';
-            });
-    });
-</script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 {% endblock %}
