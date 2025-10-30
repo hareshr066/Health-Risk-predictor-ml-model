@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <h2>Upload Health Records (PDF/Image)</h2>
+    <p>Upload a file containing your biometric data. We will simulate extracting the relevant numbers to feed into the model.</p>
+
+    {% if error %} <p class="error-message">{{ error }}</p> {% endif %}
+
+    <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data" class="upload-form">
+
+        <div class="form-group">
+            <label for="file">Select Health Document (PDF/JPG/PNG):</label>
+            <input type="file" name="health_data_file" id="file" required class="file-input">
+            <small>Upload any file. It is used to trigger the simulation. File is deleted immediately after extraction simulation.</small>
+        </div>
+        <button type="submit" class="btn-primary">Upload and Run Analysis</button>
+    </form>
+
+    <div class="disclaimer mt-30">
+        <h3>Demonstration Focus:</h3>
+        <p>This feature demonstrates our full-stack capabilities, including **user authentication**, **data pipeline integration** (simulated extraction), and **database persistence** of results.</p>
+    </div>
+</div>
+{% endblock %}

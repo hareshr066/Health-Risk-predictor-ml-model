@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Result{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <h2>Personalized Risk Analysis Result</h2>
+
+    <div class="result-box {{ 'high-risk' if risk_level == 'HIGH RISK' else 'low-risk' }}">
+        <h3>Overall Risk Level: {{ risk_level }}</h3>
+        <div class="risk-score">
+            Probability of Risk: <span>{{ risk_percent }}%</span>
+        </div>
+    </div>
+
+    <div class="chart-section main-content">
+        <h3>📈 Historical Risk Trend</h3>
+        <p style="color: #6c757d; font-size: 0.9em;">Tracking your risk score over your past analyses.</p>
+        <canvas id="riskChart"></canvas>
+    </div>
+    <div class="details-section">
+        <h3>Biometric Data Analyzed:</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Value</th>
+                    <th>Impact (Simulated)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in data.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                    <td>
+                        {% if key == 'Glucose' and value > 130 %}
+                            <span class="impact-high">High Impact</span>
+                        {% elif key == 'BMI' and value > 30 %}
+                            <span class="impact-high">High Impact</span>
+                        {% elif key == 'Age' and value > 40 %}
+                            <span class="impact-medium">Medium Impact</span>
+                        {% else %}
+                            <span class="impact-low">Low Impact</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="recommendations-section">
+        <h3>🎯 Personalized Action Plan (Your BMI: {{ bmi }})</h3>
+        <ul class="tip-list">
+            {% for tip in tips %}
+            <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+        <p class="mt-20" style="font-style: italic; color: #6c757d;">
+            This plan is generated based on your latest risk score and your profile's BMI.
+        </p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn-secondary">Back to Dashboard</a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Fetch data from the Flask API endpoint
+        fetch('/api/history')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch history data.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ctx = document.getElementById('riskChart').getContext('2d');
+
+                // 2. Initialize the chart
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels, // Dates/Times
+                        datasets: [{
+                            label: 'Risk Percentage (%)',
+                            data: data.data, // Risk Scores
+                            borderColor: 'var(--risk-high)',
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            tension: 0.3,
+                            fill: true,
+                            pointStyle: 'circle',
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { mode: 'index', intersect: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                title: { display: true, text: 'Risk Score (%)' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Analysis Date' }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching history:', error);
+                document.querySelector('.chart-section').innerHTML = '<p class="error-message">Could not load historical chart data.</p>';
+            });
+    });
+</script>
+{% endblock %}

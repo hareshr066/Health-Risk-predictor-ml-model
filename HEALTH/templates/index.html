@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+    <h2 class="welcome-heading">Hello, {{ session['username'] }}! 👋</h2>
+    <p>Welcome back. Here is a snapshot of your personalized health journey.</p>
+
+    <div class="info-card" style="border-left: 5px solid var(--secondary-color);">
+        <h3>Your Current Biometrics</h3>
+        <div class="input-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <p><strong>Age:</strong> {{ biometrics.age }} yrs</p>
+            <p><strong>Height:</strong> {{ biometrics.height }} cm</p>
+            <p><strong>Weight:</strong> {{ biometrics.weight }} kg</p>
+            <p><strong>BMI:</strong> <span style="font-weight: bold; color: var(--risk-high);">{{ biometrics.bmi }}</span></p>
+        </div>
+    </div>
+
+
+    {% if has_analysis %}
+        <div class="alert {{ 'high-risk-summary' if previous_report.risk_level == 'HIGH RISK' else 'low-risk-summary' }}">
+            <div style="flex-grow: 1;">
+                <h3>Your Last Assessment Summary:</h3>
+                <p><strong>Risk Level:</strong> <span class="report-level">{{ previous_report.risk_level }}</span></p>
+                <p><strong>Risk Score:</strong> {{ previous_report.risk_percent }}%</p>
+            </div>
+            <a href="{{ url_for('analysis') }}" class="btn-secondary">View Full Report</a>
+        </div>
+    {% else %}
+        <div class="alert warning">
+            ⚠️ Start your health journey! Please upload your data to generate your first personalized report.
+            <a href="{{ url_for('upload') }}" class="btn-primary">Start Analysis</a>
+        </div>
+    {% endif %}
+
+    <div class="tracking-card">
+        <h3>Actionable Health Tracking (Daily Progress)</h3>
+        <p>Log your daily progress to actively manage your risk factors.</p>
+
+        <form action="#" method="POST" class="tracking-form">
+            <div class="input-grid">
+                <div class="form-group">
+                    <label>Activity (Minutes):</label>
+                    <input type="number" placeholder="e.g., 30 min walk" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Water Intake (Liters):</label>
+                    <input type="number" step="0.1" placeholder="e.g., 2.5 L" min="0" value="0">
+                </div>
+            </div>
+            <button type="submit" class="btn-secondary">Log Daily Progress</button>
+            <small style="display: block; margin-top: 10px;">(Logging feature is for demonstration purposes in this hackathon MVP)</small>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
